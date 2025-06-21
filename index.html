@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Happy Birthday Ritika!</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: linear-gradient(to top, #0f2027, #203a43, #2c5364);
+      font-family: 'Comic Sans MS', cursive;
+      color: white;
+    }
+
+    h1 {
+      text-align: center;
+      margin-top: 50px;
+      font-size: 3em;
+      color: #ffdd57;
+      animation: glow 2s infinite alternate;
+    }
+
+    @keyframes glow {
+      from { text-shadow: 0 0 10px #ffd700; }
+      to { text-shadow: 0 0 20px #ffa500, 0 0 30px #ff4500; }
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -2;
+    }
+
+    #gift-box {
+      width: 100px;
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+
+    #gift-box:hover {
+      transform: translateX(-50%) scale(1.1);
+    }
+
+    .popup {
+      display: none;
+      position: fixed;
+      top: 55%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid #ffcc00;
+      padding: 30px;
+      color: #fff;
+      font-size: 1.5em;
+      text-align: center;
+      border-radius: 20px;
+      animation: fadeIn 2s;
+      z-index: 10;
+      box-shadow: 0 0 20px gold;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translate(-50%, -60%); }
+      to { opacity: 1; transform: translate(-50%, -50%); }
+    }
+
+    .balloon {
+      position: absolute;
+      width: 50px;
+      animation: floatUp 6s ease-in-out forwards;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(-150vh); opacity: 0; }
+    }
+
+    #typewriter {
+      font-size: 1.3em;
+      text-align: center;
+      padding: 20px;
+      max-width: 800px;
+      margin: auto;
+      white-space: pre-wrap;
+      border-radius: 10px;
+      animation: fadeIn 3s;
+    }
+
+    .firework {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: gold;
+      opacity: 0.8;
+      animation: explode 1s ease-out forwards;
+    }
+
+    @keyframes explode {
+      0% { transform: scale(0.5); opacity: 1; }
+      100% { transform: scale(4) translateY(-50px); opacity: 0; }
+    }
+
+    audio {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="stars"></canvas>
+
+<h1>🎉 Happy Birthday Suhani  🎂</h1>
+
+<!-- Gift Box -->
+<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ3TR7F44ggxDCdLF1JmaLznQ2ZHM17Ux1dsAd5Xpc6u1S9CapfpqC4yGiK&s=10" id="gift-box" onclick="showSurprise()" alt="Gift Box" />
+
+<!-- Popup Message -->
+<div class="popup" id="popup">
+  🎈 Surprise! Wishing you a day full of sparkles and love 💖<br> You deserve the whole universe 🌟
+</div>
+
+<!-- Auto Typing Message -->
+<div id="typewriter"></div>
+
+<!-- Background Music -->
+<audio autoplay loop>
+  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mp3">
+</audio>
+
+<script>
+  // Star background
+  const canvas = document.getElementById('stars');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const stars = [];
+  for (let i = 0; i < 100; i++) {
+    stars.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      radius: Math.random() * 1.5,
+      dx: (Math.random() - 0.5) * 0.5,
+      dy: (Math.random() - 0.5) * 0.5
+    });
+  }
+
+  function drawStars() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "white";
+    for (let star of stars) {
+      ctx.beginPath();
+      ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+      ctx.fill();
+      star.x += star.dx;
+      star.y += star.dy;
+      if (star.x < 0 || star.x > canvas.width) star.dx *= -1;
+      if (star.y < 0 || star.y > canvas.height) star.dy *= -1;
+    }
+    requestAnimationFrame(drawStars);
+  }
+  drawStars();
+
+  // Surprise Function
+  function showSurprise() {
+    document.getElementById('popup').style.display = 'block';
+    startTyping();
+    launchBalloons();
+    launchFireworks();
+  }
+
+  // Typing Message
+  const message = "Dear Suhani,\nWishing you a magical birthday filled with joy, sparkle, and endless memories. 🌟\nStay happy, stay awesome. Happy Birthday! 🎉🎂";
+  let i = 0;
+  function startTyping() {
+    const el = document.getElementById("typewriter");
+    el.innerHTML = "";
+    i = 0;
+    function type() {
+      if (i < message.length) {
+        el.innerHTML += message.charAt(i);
+        i++;
+        setTimeout(type, 50);
+      }
+    }
+    type();
+  }
+
+  // Balloons
+  function launchBalloons() {
+    for (let i = 0; i < 20; i++) {
+      const balloon = document.createElement('img');
+      balloon.src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSMUxSZRuR9l50W_oREt5CJsEtPvOPuwDekPQ&s';
+      balloon.className = 'balloon';
+      balloon.style.left = `${Math.random() * 100}%`;
+      balloon.style.top = '80%';
+      balloon.style.animationDuration = `${4 + Math.random() * 3}s`;
+      document.body.appendChild(balloon);
+      setTimeout(() => balloon.remove(), 6000);
+    }
+  }
+
+  // Fireworks
+  function launchFireworks() {
+    for (let i = 0; i < 40; i++) {
+      const fw = document.createElement('div');
+      fw.className = 'firework';
+      fw.style.left = `${Math.random() * 100}vw`;
+      fw.style.top = `${Math.random() * 60 + 10}vh`;
+      fw.style.background = `hsl(${Math.random() * 360}, 100%, 60%)`;
+      document.body.appendChild(fw);
+      setTimeout(() => fw.remove(), 1000);
+    }
+  }
+</script>
+
+</body>
+</html>
